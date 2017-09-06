@@ -165,6 +165,8 @@ def most_common_interests_with(user):
 
 
 
+
+
 salaries_and_tenures = [
         (83000, 8.7), 
         (88000, 8.1),
@@ -177,6 +179,15 @@ salaries_and_tenures = [
         (48000, 1.9),
         (63000, 4.2)
 ]
+
+
+#Scatter Plot
+'''
+import matplotlib.pyplot as plt
+x = [ year for sal, year in salaries_and_tenures]
+y = [ sal for sal, year in salaries_and_tenures]
+plt.scatter(x,y)
+'''
 
 # keys are years, values are lists of the salaries for each tenure
 salary_by_tenure = defaultdict(list)
@@ -211,6 +222,8 @@ average_salary_by_bucket = {
 
 
 
+
+
 def predict_paid_or_unpaid(years_experience):
     if years_experience < 3.0:
         return "paid"
@@ -219,6 +232,7 @@ def predict_paid_or_unpaid(years_experience):
     else:
         return "paid"
         
+
 
 
 words_and_counts = Counter(word
