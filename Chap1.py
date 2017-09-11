@@ -107,8 +107,19 @@ def friends_of_friend_ids(user):
         if not_the_same(user, foaf) 	# who aren't me
         and not_friends(user, foaf))    # and aren't my friends
 
-
-
+'''
+def friends_of_friend_ids(user):
+    return Counter(foaf["id"]
+    for friend in user["friends"] 		# for each of my friends
+        for foaf in friend["friends"] 	# count *their* friends
+        if not_the_same(user, foaf) 	# who aren't me
+        and not_friends(user, foaf))    # and aren't my friends
+'''
+from collections import defaultdict
+# keys are interests, values are lists of user_ids with that interest
+fof_by_user = defaultdict(list)
+for user in users:
+    fof_by_user[user['id']].append(friends_of_friend_ids(user).most_common())
 
 
 
