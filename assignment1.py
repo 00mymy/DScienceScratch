@@ -8,9 +8,9 @@ Created on Fri Sep  8 11:18:20 2017
 from collections import defaultdict
 
 scores = [
-        {"name":"kim", "score" : [("kor", 100), ("math", 90), ("eng",80)]},
-        {"name":"lee", "score" : [("kor", 50), ("math", 50), ("eng",50)]},
-        {"name":"seo", "score" : [("kor", 90), ("math", 80), ("eng",90)]},
+        {"name":"kim", "score" : [("kor", 100), ("math", 90), ("eng",80), ("dsc",100)]},
+        {"name":"lee", "score" : [("kor", 50), ("math", 50), ("eng",50), ("dsc",100)]},
+        {"name":"seo", "score" : [("kor", 90), ("math", 80), ("eng",90), ("dsc",100)]},
         # and more
     ]
     
@@ -28,7 +28,7 @@ def get_sum_by_course():
             by_course[score[0]] += score[1]
     return by_course    
   
-def get_avg_by_name():
+def get_avg_by_student():
     by_name = defaultdict(int)
     for stud in scores:
         by_name[stud['name']]= sum([s for c, s in stud['score']]) / len(stud['score'])
@@ -43,8 +43,8 @@ def get_avg_by_course():
             course_cnt[score[0]] += 1
             
     avg_by_course = defaultdict(int)
-    for stud in course_sum.keys():
-        avg_by_course[stud] = course_sum[stud] / course_cnt[stud]
+    for course in course_sum.keys():
+        avg_by_course[course] = course_sum[course] / course_cnt[course]
     return avg_by_course
 
 def get_student_scores_by_course():
@@ -73,7 +73,25 @@ std_score_list.sort(key=lambda x:x[1])
 
 #print("sum_by_name =", get_sum_by_name())
 #print("sum_by_course =", get_sum_by_course())
-print("Students Average =", dict(get_avg_by_name()))
+print("Students Average =", dict(get_avg_by_student()))
 print("Courses Average =", dict(get_avg_by_course()))
 print("Best student =", get_best_student())
 print("Best student by course=", dict(get_best_student_of_course()))
+
+
+
+# Visualization
+c_avg_dict = dict(get_avg_by_course())
+c_avg = sorted(c_avg_dict.items(), key=lambda x:x[1], reverse=True)
+k_list = [k for k, _ in c_avg]
+v_list = [v for _, v in c_avg]
+
+xs = [i + 0.1 for i, _ in enumerate(k_list)]
+
+from matplotlib import pyplot as plt
+plt.bar(xs, v_list)
+plt.ylabel("Avg. Score")
+plt.ylim(ymax = 100)
+plt.title("Course Averages")
+plt.xticks([i + 0.5 for i, _ in enumerate(k_list)], k_list)
+plt.show()
