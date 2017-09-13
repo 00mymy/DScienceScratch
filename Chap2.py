@@ -6,11 +6,11 @@ Created on Mon Jun 12 11:22:53 2017
 """
 
 for i in [1, 2, 3, 4, 5]:
-    print('i : %d', i)                   # first line in "for i" block
+    print('i : %d' % i)                     # first line in "for i" block
     for j in [1, 2, 3, 4, 5]:
-        print('-- j : %d', j)            # first line in "for j" block
-        print('-- i+j :%d', i + j)       # last line in "for j" block
-    print('last i : %d', i)              # last line in "for i" block
+        print('-- j : %d' % j)              # first line in "for j" block
+        print('-- i+j :%d' % (i + j))       # last line in "for j" block
+    print('last i : %d' % i)               # last line in "for i" block
 print("END - done looping")
 
 long_winded_computation = (1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 +
@@ -28,8 +28,6 @@ two_plus_three = 2 + \
 
 import re as regex
 my_regex = regex.compile("[0-9]+", regex.I)
-
-import matplotlib.pyplot as plt
 
 
 from collections import defaultdict, Counter
@@ -278,16 +276,28 @@ increasing_pairs = [(x, y)
                             
 #####################################################################
 # Generator                              
-def gen(n):
+def gen_num(n):
     """a lazy version of range"""
     i = 0
     while i < n:
         yield i
         i += 1
 
-for i in gen(10):
+for i in gen_num(10):
+    print(i)
+
+def list_num(n):
+    return [i for i in range(n)]
+
+for i in list_num(10):
     print(i)
     
+
+l1 = list_num(5000000) 
+l2 = gen_num(5000000) #faster!
+
+l1[100]
+l2.__next__()
 
 #####################################################################
 # Random
@@ -313,8 +323,18 @@ lottery_numbers = range(60)
 winning_numbers = random.sample(lottery_numbers, 6)
 
 
+# Random : Normal distribution
+import numpy as np
+mu, sigma = 100, 10
+s = np.random.normal(mu, sigma, 100)
+
+list(s).sort()
+
+
 #####################################################################
 #Regular Expressions
+import re
+
 print(all([ # all of these are true, because
     not re.match("a", "cat"), # * 'cat' doesn't start with 'a'
     re.search("a", "cat"), # * 'cat' has an 'a' in it
@@ -322,3 +342,26 @@ print(all([ # all of these are true, because
     3 == len(re.split("[ab]", "carbs")), # * split on a or b to ['c','r','s']
     "R-D-" == re.sub("[0-9]", "-", "R2D2") # * replace digits with dashes
 ])) # prints
+
+ex = re.compile("[0-9a-z]+", regex.I)
+ex.match('1234')
+ex.match('1abc234')
+ex.match('1abcABC234')
+
+#####################################################################
+#Enumerations
+
+doc_text = """2개 아상의 DL 분석서버로 구성된 경우,  
+    두 서버 사이에 집계 결과가 다를 수 있다. (약 0.05% 이하이긴하나...) 이 경우, 
+    보고서를 보는 사람에 따라 운이 없으면 집계 수치가 감소하는 현상이 생길 수도 있다."""
+
+doc = doc_text.split()
+
+for  w in doc:
+    print(w)
+    
+for i, w in enumerate(doc):
+    print("%d : %s" % (i, w))
+
+for i, _ in enumerate(doc):
+    print(i)
