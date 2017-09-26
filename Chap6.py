@@ -6,6 +6,8 @@ Created on Thu Aug  3 10:31:00 2017
 """
 
 from numpy import random as nrd
+import math
+import random
 
 def random_suldam():
     return nrd.choice(["sul", "dam", "both", "none"], p=[.8, .1, .09, .01])
@@ -88,8 +90,96 @@ def inverse_normal_cdf(p, mu=0, sigma=1, tolerance=0.00001):
     return mid_z
 
 
+'''
+xs = [x / 10.0 for x in range(-50, 50)]
+plt.plot(xs,[normal_pdf(x,sigma=1) for x in xs],'-',label='mu=0,sigma=1')
+plt.plot(xs,[normal_pdf(x,sigma=2) for x in xs],'--',label='mu=0,sigma=2')
+plt.plot(xs,[normal_pdf(x,sigma=0.5) for x in xs],':',label='mu=0,sigma=0.5')
+plt.plot(xs,[normal_pdf(x,mu=-1) for x in xs],'-.',label='mu=-1,sigma=1')
+plt.legend()
+plt.title("Various Normal pdfs")
+plt.show()
+'''
+
 # scipy.stats 라이브러리를 이용하면 간편하다
+'''
 from scipy.stats import norm
 norm.pdf(0) #=normal_pdf(0)
 norm.cdf(0) #=normal_cdf(0)
 norm.ppf(.5) #=inverse_normal_cdf(.5)
+
+xs = [x / 10.0 for x in range(-50, 50)]
+plt.plot(xs,[norm.pdf(x,loc=0, scale=1) for x in xs],'-',label='mu=0,sigma=1')
+plt.plot(xs,[norm.pdf(x,loc=0, scale=2) for x in xs],'--',label='mu=0,sigma=2')
+plt.plot(xs,[norm.pdf(x,loc=0, scale=.5) for x in xs],':',label='mu=0,sigma=0.5')
+plt.plot(xs,[norm.pdf(x,loc=-1, scale=1) for x in xs],'-.',label='mu=-1,sigma=1')
+plt.legend()
+plt.title("Various Normal pdfs")
+plt.show()
+
+
+plt.plot(xs,[norm.cdf(x,loc=0, scale=1) for x in xs],'-',label='mu=0,sigma=1')
+plt.plot(xs,[norm.cdf(x,loc=0, scale=2) for x in xs],'--',label='mu=0,sigma=2')
+plt.plot(xs,[norm.cdf(x,loc=0, scale=.5) for x in xs],':',label='mu=0,sigma=0.5')
+plt.plot(xs,[norm.cdf(x,loc=-1, scale=1) for x in xs],'-.',label='mu=-1,sigma=1')
+plt.legend()
+plt.title("Various Normal pdfs")
+plt.show()
+'''
+
+# Central Limit Theorem
+def bernoulli_trial(p):
+    return 1 if random.random() < p else 0
+    
+def binomial(n, p):
+    return sum(bernoulli_trial(p) for _ in range(n))
+
+def make_hist_binomial(p, n, num_points):
+   data = [binomial(n, p) for _ in range(num_points)]
+   
+   # use a bar chart to show the actual binomial samples
+   histogram = Counter(data)
+   plt.bar([x - 0.4 for x in histogram.keys()],
+            [v / num_points for v in histogram.values()],
+            0.8,
+            color='0.75')
+   
+   mu = p * n
+   sigma = math.sqrt(n * p * (1 - p))
+   # use a line chart to show the normal approximation
+   xs = range(min(data), max(data) + 1)
+   ys = [normal_cdf(i + 0.5, mu, sigma) - normal_cdf(i - 0.5, mu, sigma) for i in xs]
+   plt.plot(xs,ys)
+   plt.title("Binomial Distribution vs. Normal Approximation")
+   plt.show()
+
+'''
+bn_counts = Counter([nrd.binomial(100, .5) for _ in range(10000)])
+
+xs = range(101)
+ys = [bn_counts[x] for x in xs]
+plt.plot(xs,ys)
+plt.title("Binomial Distribution vs. Normal Approximation")
+plt.show()
+'''
+
+# Random 비교
+'''
+nums = [int(nrd.rand()*100) for _ in range(1000)]
+#nums = [int(nrd.uniform(0,101)) for _ in range(1000)]
+#nums = [int(nrd.normal(loc=50, scale=10)) for _ in range(1000)]
+#nums = [int(nrd.binomial(100,.75)) for _ in range(1000)]
+#nums = [int(nrd.lognormal(mean=4, sigma=.2)) for n in range(1000)]
+
+num_counts = Counter(nums)
+xs = range(101) # largest value is 100
+ys = [num_counts[x] for x in xs] # height is just # of friends
+plt.bar(xs, ys)
+plt.axis([0, 101, 0, 150])
+plt.title("Histogram of Random Number Counts")
+plt.xlabel("Random numbers")
+plt.ylabel("# of times")
+plt.show()
+'''
+
+

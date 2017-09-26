@@ -40,8 +40,57 @@ def sum_of_squares(v):
     """v_1 * v_1 + ... + v_n * v_n"""
     return dot(v, v)
     
+import math
+def magnitude(v):
+    return math.sqrt(sum_of_squares(v)) # math.sqrt is square root function
+
+def squared_distance(v, w):
+    """(v_1 - w_1) ** 2 + ... + (v_n - w_n) ** 2"""
+    return sum_of_squares(vector_subtract(v, w))
+'''    
+def distance(v, w):
+    return math.sqrt(squared_distance(v, w))
+'''
     
-    
+def distance(v, w):
+    return magnitude(vector_subtract(v, w))
+
+
+# numpy array - 편리하게...
+# http://www.scipy-lectures.org/intro/numpy/operations.html
+'''
+import numpy as np
+v1 = np.array([1, 2, 3])
+v2 = np.array([4, 5, 6])
+
+v1+v2
+v1-v2
+v1+1
+3*v1
+v1*v2
+sum(v1)
+v1.sum() 
+v2.max()
+v2.argmax()
+v1.argmin()
+v2.mean()
+np.mean(v2)
+np.median(v2)
+v2.std()
+np.std(v2)
+v1.dot(v2)
+np.dot(v1,v2) # 'dot' operation is not array multiplication
+
+# scipy
+from scipy.spatial import distance as dist
+d1 = dist.euclidean(v1,v2)
+d2 = dist.cosine(v1,v2)
+d3 = dist.correlation(v1,v2)
+'''
+
+
+
+
 A = [[1, 2, 3], # A has 2 rows and 3 columns
      [4, 5, 6]]
      
@@ -78,6 +127,7 @@ def is_diagonal(i, j):
 
 identity_matrix = make_matrix(5, 5, is_diagonal)
 
+#heights, weights, and ages of 1,000 people you could put them in a 1, 000 × 3 matrix
 data = [[70, 170, 40],
 [65, 120, 26],
 [77, 250, 19],
@@ -107,3 +157,9 @@ friendships = [[0, 1, 1, 0, 0, 0, 0, 0, 0, 0], # user 0
 
 friends_of_five = [i for i, is_friend in enumerate(friendships[5])
     if is_friend]
+
+'''
+def friends_of(p) :
+    return [i for i, is_friend in enumerate(friendships[p])
+                if is_friend]
+'''
