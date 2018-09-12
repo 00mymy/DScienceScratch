@@ -5,6 +5,8 @@ Created on Wed Jun  7 15:16:50 2017
 @author: 00mymy
 """
 
+
+
 users = [
     { "id": 0, "name": "Hero" },
     { "id": 1, "name": "Dunn" },
@@ -27,6 +29,10 @@ for user in users:
 '''
 for user in users:
     print(user)
+    
+users
+users[0]
+users['id'==0]
 '''
 
 
@@ -39,12 +45,18 @@ for i, j in friendships:
 '''
 for user in users:
     print(user)
+    
+users
+users[0]
 '''
 
+#확인해보니... 좀 더럽다.
 #데이터 중복 줄여서 간단하게 만들기
 '''
+for user in users:
+    user["friends"] = []
+    
 for i, j in friendships:
-    # this works because users[i] is the user whose id is i
     users[i]["friends"].append(j) # add i as a friend of j
     users[j]["friends"].append(i) # add j as a friend of i
 '''
@@ -61,7 +73,7 @@ avg_connections = total_connections / num_users
 
 # create a list (user_id, number_of_friends)
 num_friends_by_id = [(user["id"], number_of_friends(user)) for user in users]
-num_friends_sorted = sorted(num_friends_by_id, key=lambda num_friends_by_id: num_friends_by_id[1], reverse=True) # largest to smallest
+num_friends_sorted = sorted(num_friends_by_id, key=lambda num_friends: num_friends[1], reverse=True) # largest to smallest
 
 def friends_of_friend_ids_bad(user):
     # "foaf" is short for "friend of a friend"
@@ -78,6 +90,8 @@ def friends_of_friend_ids_bad(user):
             for foaf in users[friend]["friends"]] # get each of _their_ friends   
 '''
 
+friends_of_friend_ids_bad(users[0])
+
 print([friend["id"] for friend in users[0]["friends"]]) # [1, 2]
 print([friend["id"] for friend in users[1]["friends"]]) # [0, 2, 3]
 print([friend["id"] for friend in users[2]["friends"]]) # [0, 1, 3]
@@ -87,6 +101,7 @@ print([friend for friend in users[0]["friends"]])
 print([friend for friend in users[1]["friends"]])
 print([friend for friend in users[2]["friends"]])
 '''
+
 
 
 from collections import Counter 	# not loaded by default
@@ -115,11 +130,23 @@ def friends_of_friend_ids(user):
         if not_the_same(user, foaf) 	# who aren't me
         and not_friends(user, foaf))    # and aren't my friends
 '''
+
+# 먼저 한 것과 비교해 보자
+print(friends_of_friend_ids(users[0]))
+
+
+# Friends-of-friend Look-up dict 만들기
 from collections import defaultdict
-# keys are interests, values are lists of user_ids with that interest
+
 fof_by_user = defaultdict(list)
 for user in users:
     fof_by_user[user['id']].append(friends_of_friend_ids(user).most_common())
+
+
+fof_by_user[3]
+
+
+
 
 
 
@@ -250,6 +277,8 @@ words_and_counts = Counter(word
     for user, interest in interests
         for word in interest.lower().split())
         
-#for word, count in words_and_counts.most_common():
-#    if count > 1:
-#        print(word, count)
+for word, count in words_and_counts.most_common():
+    if count > 1:
+        print(word, count)
+        
+words_and_counts.most_common(5)
