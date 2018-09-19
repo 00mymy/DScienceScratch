@@ -81,6 +81,10 @@ np.std(v2)
 v1.dot(v2)
 np.dot(v1,v2) # 'dot' operation is not array multiplication
 
+#주의
+sum(v1,v2) # not v1+v2 !!!
+
+
 # scipy
 from scipy.spatial import distance as dist
 d1 = dist.euclidean(v1,v2)
@@ -105,7 +109,7 @@ sum = ft.reduce(lambda a, b : 3, [1,2,3,4,5])
 
 def shape(A):
     num_rows = len(A)
-    num_cols = len(A[0]) #if A else 0 # number of elements in first row
+    num_cols = len(A[0]) if A else 0 # number of elements in first row
     return num_rows, num_cols
     
 def get_row(A, i):
